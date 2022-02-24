@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Modefin Test</string>
+    <string name="product_details">Product Details</string>
+    <string name="no_data">No data found</string>
+</resources>
