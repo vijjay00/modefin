@@ -37,7 +37,7 @@ public class FuncsVars {
     public static ProgressDialog showDialog(Activity activity) {
         ProgressDialog pd = new ProgressDialog(activity);
         pd.setMessage("Loading Please Wait...");
-        pd.setCancelable(true);
+        pd.setCancelable(false);
         return pd;
     }
 

@@ -34,7 +34,29 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void searchApi(String text) {
-        Call<List<MakeupResponse>> call = ApiClient.getRetrofit().create(ApiService.class).getMakeupList(text);
+        Call<List<MakeupResponse>> call = ApiClient.getRetrofit().create(ApiService.class).getSearchMakeupList(text);
+        call.enqueue(new Callback<List<MakeupResponse>>() {
+            @Override
+            public void onResponse(Call<List<MakeupResponse>> call, Response<List<MakeupResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    makeupResponses = (ArrayList<MakeupResponse>) response.body();
+                    mutableLiveData.setValue(makeupResponses);
+                } else if(response.code() == 500) {
+                    error.postValue("Internal server error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MakeupResponse>> call, Throwable t) {
+                error.postValue(t.getMessage());
+                Log.d("ListSize", " - > Error    " + t.getMessage());
+
+            }
+        });
+    }
+
+    public void getList() {
+        Call<List<MakeupResponse>> call = ApiClient.getRetrofit().create(ApiService.class).getMakeupList();
         call.enqueue(new Callback<List<MakeupResponse>>() {
             @Override
             public void onResponse(Call<List<MakeupResponse>> call, Response<List<MakeupResponse>> response) {

@@ -49,10 +49,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mainAdapter);
 
+        showProgress();
+        mainViewModel.getList();
         mainViewModel.getMakeUpList().observe(this, new Observer<List<MakeupResponse>>() {
             @Override
             public void onChanged(List<MakeupResponse> makeup) {
-                progressDismiss();
+                hideProgress();
                 if(makeup.size()>0) {
                     updateRecyclerview(makeup);
                 } else {
@@ -68,16 +70,14 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel.error.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                progressDismiss();
+                hideProgress();
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (!progressDialog.isShowing()){
-                    progressDialog.show();
-                }
+                showProgress();
                 mainViewModel.searchApi(query);
                 return false;
             }
@@ -97,7 +97,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void progressDismiss() {
+    private void showProgress() {
+        if (!progressDialog.isShowing()){
+            progressDialog.show();
+        }
+    }
+
+    private void hideProgress() {
         if (progressDialog.isShowing()){
             progressDialog.dismiss();
         }

@@ -11,6 +11,9 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     @GET("api/v1/products.json")
-    Call<List<MakeupResponse>> getMakeupList(@Query("brand") String brand);
+    Call<List<MakeupResponse>> getSearchMakeupList(@Query("brand") String brand);
+
+    @GET("api/v1/products.json")
+    Call<List<MakeupResponse>> getMakeupList();
 
 }
